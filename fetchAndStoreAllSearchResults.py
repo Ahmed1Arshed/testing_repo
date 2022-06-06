@@ -49,18 +49,17 @@ def iesupply_url():
     get_url = setting_proxy(url)
     get_url = get_url.url
     page = requests.get(get_url , headers=headers)
-    print(page)
-    # sitemap_index = BeautifulSoup(page.content, 'html.parser')
-    # print(sitemap_index)
-    # sitemap_url = [element.text for element in sitemap_index.findAll('loc')]
-    # for data in sitemap_url:
-        # if 'product' in data
-        #     result = {
-        #         "competitor":"iesupply",
-        #         "url":data,
-        #         "scraper_type":"sitemap"
-        #     }
-        #     print(result)
+    sitemap_index = BeautifulSoup(page.content, 'html.parser')
+    print(sitemap_index)
+    sitemap_url = [element.text for element in sitemap_index.findAll('loc')]
+    for data in sitemap_url:
+        if 'product' in data:
+            result = {
+                "competitor":"iesupply",
+                "url":data,
+                "scraper_type":"sitemap"
+            }
+            print(result)
         #     outputs.append(result)
         #     if len(outputs) == 5000:
         #         url_insert(outputs)
