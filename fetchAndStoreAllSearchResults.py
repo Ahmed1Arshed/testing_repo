@@ -1,5 +1,4 @@
 import traceback
-from utils.service.database.mssql import *
 import datetime
 import scrapy
 import random
