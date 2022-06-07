@@ -11,10 +11,12 @@ from random_user_agent.params import SoftwareName, OperatingSystem
 import pydash
 from bs4 import BeautifulSoup
 import pypyodbc as pyodbc
+from dateutil.relativedelta import relativedelta
+
 # client = pymongo.MongoClient(os.getenv('DB'))
 # mydb = client["pricing"]
 
-connection_str = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={user};PWD={password};MultipleActiveResultSets=True "
+connection_str = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={'electrical.database.windows.net'};DATABASE={'amplify'};UID={'api'};PWD={'m7boukyvT.TedQ'};MultipleActiveResultSets=True "
 conn = pyodbc.connect(connection_str)
 cursor = conn.cursor()
 
@@ -64,7 +66,7 @@ def reraise(e, *args):
     #
     raise e.with_traceback(e.__traceback__)
    
-   
+
 def url_insert(data):
     try:
         print("get inside url_insert")
