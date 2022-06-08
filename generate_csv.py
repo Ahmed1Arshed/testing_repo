@@ -3,7 +3,7 @@ import csv
 import os
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["pricing"]
+db = client["utilities-scraper"]
 
 filename = 'products_data.csv'
 fieldnames = ['their_name', 'competitor']
