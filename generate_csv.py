@@ -15,7 +15,7 @@ def get_data_and_generate_csv():
     chunk = 20000
     products_count = True
     while products_count:
-        cursor = db.competitorproducts.find({"isMatch": True}).skip(skip).limit(chunk)
+        cursor = db.competitorproducts.find({"isMatched": True}).skip(skip).limit(chunk)
         products = [product for product in cursor]
         with open(filename, 'a', encoding='UTF8', newline='') as f:
             writer = csv.DictWriter(f, extrasaction='ignore', fieldnames=fieldnames)
