@@ -19,3 +19,5 @@ def controlparts_url():
         }
         outputs.append(result)
     print(outputs)
+
+controlparts_url()
