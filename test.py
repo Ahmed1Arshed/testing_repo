@@ -1,7 +1,6 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from utils.helper import *
 import pymongo
 from pymongo import MongoClient, InsertOne
 import os
