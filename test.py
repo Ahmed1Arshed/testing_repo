@@ -18,6 +18,6 @@ def get_urls():
     page = requests.get(url,headers=headers)
     sitemap_index = BeautifulSoup(page.content, 'html.parser')
     urls = [element.text for element in sitemap_index.findAll('loc')]
-    return urls
+    return len(urls)
 
 print(get_urls())
