@@ -1,23 +1,23 @@
-import re
 import requests
 from bs4 import BeautifulSoup
-import pymongo
-from pymongo import MongoClient, InsertOne
-import os
+from random_user_agent.user_agent import UserAgent
+from random_user_agent.params import SoftwareName, OperatingSystem
 
-def controlparts_url():
-    outputs = []
-    url = 'https://controlparts.com/sitemap_products_1.xml?from=4497408295009&to=4763190591585'
-    page = requests.get(url)
+def get_url():
+    url = 'https://www.southlandelectrical.com/sitemap.xml'
+    software_names = [SoftwareName.CHROME.value]
+    operating_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
+    user_agent_rotator = UserAgent(software_names=software_names, operating_systems=operating_systems, limit=100)
+    user_agent = user_agent_rotator.get_random_user_agent()
+    headers =  {
+        'Accept': '*/*',
+        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'User-Agent': user_agent,
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+    page = requests.get(url,headers=headers)
     sitemap_index = BeautifulSoup(page.content, 'html.parser')
     sitemap_url = [element.text for element in sitemap_index.findAll('loc')]
-    for data in sitemap_url:
-        result = {
-            "competitor": "controlparts",
-            "url": data,
-            "scraper_type": "sitemap"
-        }
-        outputs.append(result)
-    print(outputs)
+    return sitemap_url
 
-controlparts_url()
+print(get_url())
