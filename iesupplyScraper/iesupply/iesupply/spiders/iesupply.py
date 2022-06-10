@@ -13,6 +13,15 @@ from datetime import datetime , date
 import concurrent.futures
 
 class QuotesSpider(scrapy.Spider):
+    custom_settings = {
+        'RETRY_ENABLED' : True,
+        'RETRY_TIMES' : 10,
+        'DOWNLOAD_DELAY' : 2,
+        'DOWNLOADER_MIDDLEWARES' : {
+            'iesupply.middlewares.CustomRetryMiddleware': 100,
+            'scrapy.downloadermiddlewares.retry.RetryMiddleware': None
+        }
+    }
     name = "quotes"
     start_urls = ["https://www.iesupply.com/product/detail/4111/arlington-industries-nm900"]
     
@@ -82,97 +91,99 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         try:
             main_url = response.url
-            main_info_details = pydash.get(response.css("div.container"), 0)
-            if main_info_details is None:
-                message = f"No main info section found for {main_url}"
-                print(message)
-                return
-            main_details = pydash.get(main_info_details.css('div.body-content'), 0)
-            if main_details is None:
-                message = f"No main info section found for {main_url}"
-                print(message)
-                return
-            main_info = pydash.get(main_details.css('div#productDetail.product'), 0)
-            if main_info is None:
-                message = f"No main info section found for {main_url}"
-                print(message)
-                return
-            images = []
-            img_details = pydash.get(main_info.css('div.carouselContainer') , 0)
-            if img_details is not None:
-                img_details_info = pydash.get(img_details.css('div.currentImage') ,0)
-                if img_details_info is not None and img_details_info.css('img.primaryMedia.img-responsive'):
-                    img_src = img_details_info.css("img::attr(src)").extract()
-                    img_alt = img_details_info.css("img::attr(alt)").extract()
-                    img_title = img_details_info.css("img::attr(title)").extract()
-                    images.append({
-                        "src": self.listToString(img_src),
-                        "alt": self.listToString(img_alt),
-                        "title": self.listToString(img_title),
-                    })
-            data_info = pydash.get(main_info.css('div.dataContainer') , 0)
+            main_details = response.header
+            # main_info_details = pydash.get(main_details.css("div.container#contentContainer"), 0)
+            # if main_info_details is None:
+            #     message = f"No main info section found for {main_url}"
+            #     print(message)
+            #     return
+            # main_details = pydash.get(response.css('div.body-content'), 0)
+            # if main_details is None:
+            #     message = f"No main details section found for {main_url}"
+            #     print(message)
+            #     return
+            # main_info = pydash.get(main_details.css('div#productDetail.product'), 0)
+            # if main_info is None:
+            #     message = f"No main info section found for productDetail {main_url}"
+            #     print(message)
+            #     return
+            # images = []
+            # img_details = pydash.get(main_info.css('div.carouselContainer') , 0)
+            # if img_details is not None:
+            #     img_details_info = pydash.get(img_details.css('div.currentImage') ,0)
+            #     if img_details_info is not None and img_details_info.css('img.primaryMedia.img-responsive'):
+            #         img_src = img_details_info.css("img::attr(src)").extract()
+            #         img_alt = img_details_info.css("img::attr(alt)").extract()
+            #         img_title = img_details_info.css("img::attr(title)").extract()
+            #         images.append({
+            #             "src": self.listToString(img_src),
+            #             "alt": self.listToString(img_alt),
+            #             "title": self.listToString(img_title),
+            #         })
+            # data_info = pydash.get(main_info.css('div.dataContainer') , 0)
             
-            if data_info is None:
-                message = f"No main info section found for {main_url}"
-                print(message)
-                return
-            their_name = None
-            manf = ""
-            data_details = pydash.get(data_info.css('div.mt10.pnInfo') ,0)
-            if data_details is not None and data_details.css("span") is not None:
-                all_data = data_details.css("span")
-                for data in all_data:
-                    if type(data.css("::text").get()) is str:
-                        if (data.css("::text").get()).strip() == 'Manufacturer:':
-                            manf = data.css("::text").extract()
-                        if data.css("::text").get().strip() == 'Catalog #':
-                            their_name = data.css("::text").extract
-            offers = []
-            price = None
-            price_details = pydash.get(data_info.css('div.priceViewComp'), 0)
-            if price_details is not None:
-                price_info = pydash.get(price_details.css('div.priceContainer'), 0)
-                if price_info is not None and price_info.css('span.pricerPerQty') is not None:
-                    price = price_info.css('span.pricerPerQty::text').get()
-                    if '$' in price or ',' in price:
-                        price = price.replace('$', '').replace(',', '')
+            # if data_info is None:
+            #     message = f"No main info section found for dataContainer{main_url}"
+            #     print(message)
+            #     return
+            # their_name = None
+            # manf = ""
+            # data_details = pydash.get(data_info.css('div.mt10.pnInfo') ,0)
+            # if data_details is not None and data_details.css("span") is not None:
+            #     all_data = data_details.css("span")
+            #     for data in all_data:
+            #         if type(data.css("::text").get()) is str:
+            #             if (data.css("::text").get()).strip() == 'Manufacturer:':
+            #                 manf = data.css("::text").extract()
+            #             if data.css("::text").get().strip() == 'Catalog #':
+            #                 their_name = data.css("::text").extract
+            # offers = []
+            # price = None
+            # price_details = pydash.get(data_info.css('div.priceViewComp'), 0)
+            # if price_details is not None:
+            #     price_info = pydash.get(price_details.css('div.priceContainer'), 0)
+            #     if price_info is not None and price_info.css('span.pricerPerQty') is not None:
+            #         price = price_info.css('span.pricerPerQty::text').get()
+            #         if '$' in price or ',' in price:
+            #             price = price.replace('$', '').replace(',', '')
 
-            cutsheet = ""
-            cutsheet_details = pydash.get(data_info.css('div.productHighlights'), 0)
-            if cutsheet_details is not None and cutsheet_details.css('span.highlight'):
-                cutsheet_info = cutsheet_details.css('span.highlight')
-                if cutsheet_info is not None and cutsheet_info.css("a::attr(href)"):
-                    cutsheet = cutsheet_info.css("a::attr(href)")
-            description = ''
-            description_details = pydash.get(data_info.css('div#descContainer'), 0)
-            if description_details is not None and description_details.css('div.longDesc'):
-                description_info = pydash.get(description_details.css('div.longDesc') ,0)
-                if description_info is not None:
-                    description = description_info.extract()
-            offers.append({
-                "condition": "newIndBox",
-                "stock": None,
-                "price": {"currency": "USD", "amount": price}
-            })
-            extracted_name = self.extract_unique_name(their_name)
-            today = date.today()
-            now = datetime.now()
-            d2 = today.strftime("%B %d, %Y")
-            current_time = now.strftime("%H:%M:%S")
-            date_time = f"{d2} {current_time}"
+            # cutsheet = ""
+            # cutsheet_details = pydash.get(data_info.css('div.productHighlights'), 0)
+            # if cutsheet_details is not None and cutsheet_details.css('span.highlight'):
+            #     cutsheet_info = cutsheet_details.css('span.highlight')
+            #     if cutsheet_info is not None and cutsheet_info.css("a::attr(href)"):
+            #         cutsheet = cutsheet_info.css("a::attr(href)")
+            # description = ''
+            # description_details = pydash.get(data_info.css('div#descContainer'), 0)
+            # if description_details is not None and description_details.css('div.longDesc'):
+            #     description_info = pydash.get(description_details.css('div.longDesc') ,0)
+            #     if description_info is not None:
+            #         description = description_info.extract()
+            # offers.append({
+            #     "condition": "newIndBox",
+            #     "stock": None,
+            #     "price": {"currency": "USD", "amount": price}
+            # })
+            # extracted_name = self.extract_unique_name(their_name)
+            # today = date.today()
+            # now = datetime.now()
+            # d2 = today.strftime("%B %d, %Y")
+            # current_time = now.strftime("%H:%M:%S")
+            # date_time = f"{d2} {current_time}"
             scrape_object = {
-                "url": main_url,
-                "alternate_names": "",
-                "captured_at": date_time,
-                "competitor": self.name,
-                "cutsheet_url": cutsheet,
-                "description": description,
-                "images": images,
-                "long_description": description,
-                "manufacturers": manf,
-                "offers": offers,
-                "their_name": their_name,
-                "extracted_names": extracted_name,
+                "test":main_details
+                # "url": main_url,
+                # "alternate_names": "",
+                # "captured_at": date_time,
+                # "competitor": self.name,
+                # "cutsheet_url": cutsheet,
+                # "description": description,
+                # "images": images,
+                # "long_description": description,
+                # "manufacturers": manf,
+                # "offers": offers,
+                # "their_name": their_name,
+                # "extracted_names": extracted_name,
             }
             
             yield scrape_object

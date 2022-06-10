@@ -1,4 +1,4 @@
-# Scrapy settings for compitator_scraper project
+# Scrapy settings for chartercontact project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,34 +7,28 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-from time import time
+BOT_NAME = 'chartercontact'
 
-
-BOT_NAME = 'iesupply'
-
-SPIDER_MODULES = ['iesupply.spiders']
-NEWSPIDER_MODULE = 'iesupply.spiders'
+SPIDER_MODULES = ['chartercontact.spiders']
+NEWSPIDER_MODULE = 'chartercontact.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'compitator_scraper (+http://www.yourdomain.com)'
+#USER_AGENT = 'chartercontact (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-PROXY_POOL_ENABLED = True
-ROTATING_PROXY_LIST_PATH ='/proxy_file.txt'
-
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 100
+#CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 #DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 20
-CONCURRENT_REQUESTS_PER_IP = 100
+#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+#CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False
@@ -51,13 +45,13 @@ CONCURRENT_REQUESTS_PER_IP = 100
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'compitator_scraper.middlewares.CompitatorScraperSpiderMiddleware': 543,
+#    'chartercontact.middlewares.ChartercontactSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'compitator_scraper.middlewares.CompitatorScraperDownloaderMiddleware': 543,
+#    'chartercontact.middlewares.ChartercontactDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -68,11 +62,9 @@ CONCURRENT_REQUESTS_PER_IP = 100
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
-
-# FEEDS = {
-#     f'{time()}.jl': {'format': 'jsonlines'},
-# }
+#ITEM_PIPELINES = {
+#    'chartercontact.pipelines.ChartercontactPipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -80,7 +72,7 @@ CONCURRENT_REQUESTS_PER_IP = 100
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 60
+#AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
