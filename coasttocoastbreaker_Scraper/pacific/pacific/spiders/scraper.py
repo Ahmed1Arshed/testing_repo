@@ -258,7 +258,7 @@ class QuotesSpider(scrapy.Spider):
                 })
             extracted_name = self.extract_unique_name(their_name)
             scrape_object = {
-                "test":productTitle.extract()
+                "test":their_name
                 # "url": main_url,
                 # "cutsheet_url": cutsheet_url,
                 # "manufacturers": manufacturers,
