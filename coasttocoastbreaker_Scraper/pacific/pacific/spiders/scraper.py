@@ -130,7 +130,7 @@ class QuotesSpider(scrapy.Spider):
             #     return
             # productTitleul = productTitle.css('ul')
             # if productTitleul is not None:
-            their_name_details = response.css('li.item.product_name')
+            their_name_details = response.css('li.product_name')
             their_name = their_name_details.css('strong::text').get()
                 
                 
