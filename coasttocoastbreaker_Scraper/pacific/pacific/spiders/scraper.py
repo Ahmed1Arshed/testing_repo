@@ -140,7 +140,7 @@ class QuotesSpider(scrapy.Spider):
             script = response.xpath('//script[@type="text/x-magento-init"]/text()').getall()
             
             for i in script:
-                if i.get("\n        .breadcrumbs") in script:
+                if i["\n        .breadcrumbs"] in script:
                     print(i)
             # productTitle = response.css("title::text").get()
             # if productTitle is None:
