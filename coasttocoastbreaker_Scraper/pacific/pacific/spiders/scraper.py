@@ -123,7 +123,7 @@ class QuotesSpider(scrapy.Spider):
             http_url = main_url.split("/")
             http_url = [ele for ele in http_url if ele.strip()]
             name_url = http_url[2].split("-")
-            productTitle = pydash.get(response.css("div.breadcrumbs"),0)
+            productTitle = response.css("div.breadcrumbs")
             if productTitle is None:
                 message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
                 print(message)
