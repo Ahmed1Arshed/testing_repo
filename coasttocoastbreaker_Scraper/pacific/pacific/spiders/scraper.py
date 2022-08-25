@@ -130,8 +130,12 @@ class QuotesSpider(scrapy.Spider):
             #     return
             # productTitleul = productTitle.css('ul')
             # if productTitleul is not None:
-            their_name_details = response.css('li.item.product')
-            their_name = their_name_details.css('strong::text').get()
+            productTitle = pydash.get(main_info.css("div.product-add-form"),0)
+            if productTitle is None:
+                message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
+                print(message)
+                return
+            their_name = productTitle.css("form#product_addtocart_form").get("data-product-sku")
                 
                 
             # productTitle = response.css("title::text").get()
@@ -258,7 +262,7 @@ class QuotesSpider(scrapy.Spider):
                 })
             extracted_name = self.extract_unique_name(their_name)
             scrape_object = {
-                "test":their_name.extract()
+                "test":their_name
                 # "url": main_url,
                 # "cutsheet_url": cutsheet_url,
                 # "manufacturers": manufacturers,
