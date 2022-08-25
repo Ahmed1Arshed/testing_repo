@@ -128,7 +128,7 @@ class QuotesSpider(scrapy.Spider):
                 message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
                 print(message)
                 return
-            productTitleul = productTitle.css('ul')
+            # productTitleul = productTitle.css('ul')
             # if productTitleul is not None:
             #     their_name_details = productTitleul.css('li.item.product_name')
             #     their_name = their_name_details.css('strong::text').get()
@@ -258,7 +258,7 @@ class QuotesSpider(scrapy.Spider):
                 })
             extracted_name = self.extract_unique_name(their_name)
             scrape_object = {
-                "test":productTitleul.extract()
+                "test":productTitle.extract()
                 # "url": main_url,
                 # "cutsheet_url": cutsheet_url,
                 # "manufacturers": manufacturers,
