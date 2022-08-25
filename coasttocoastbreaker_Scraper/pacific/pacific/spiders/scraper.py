@@ -135,7 +135,7 @@ class QuotesSpider(scrapy.Spider):
                 message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
                 print(message)
                 return
-            their_name = productTitle.css("form#product_addtocart_form[data-product-sku]::text").get()
+            their_name = productTitle.css("form#product_addtocart_form::attr(data-product-sku)").get()
                 
                 
             # productTitle = response.css("title::text").get()
