@@ -123,24 +123,26 @@ class QuotesSpider(scrapy.Spider):
             http_url = main_url.split("/")
             http_url = [ele for ele in http_url if ele.strip()]
             name_url = http_url[2].split("-")
-            # productTitle = pydash.get(response.css("div.breadcrumbs"),0)
-            # if productTitle is None:
-            #     message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
-            #     print(message)
-            #     return
-            # productTitleul = productTitle.css('ul')
+            productTitle = pydash.get(response.css("div.breadcrumbs"),0)
+            if productTitle is None:
+                message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
+                print(message)
+                return
+            productTitleul = productTitle.css('ul')
             # if productTitleul is not None:
             #     their_name_details = productTitleul.css('li.item.product_name')
             #     their_name = their_name_details.css('strong::text').get()
-            productTitle = response.css("title::text").get()
-            if productTitle is None:
-                message = f"No their_name info found productTitle = $('title').text()for {main_url}"
-                print(message)
-                return
-            if ' ' in productTitle:
-                their_name = productTitle.split(' ')[0].strip()
-            else:
-                their_name = productTitle
+                
+                
+            # productTitle = response.css("title::text").get()
+            # if productTitle is None:
+            #     message = f"No their_name info found productTitle = $('title').text()for {main_url}"
+            #     print(message)
+            #     return
+            # if ' ' in productTitle:
+            #     their_name = productTitle.split(' ')[0].strip()
+            # else:
+            #     their_name = productTitle
             
             if product_attributes is not None and len(product_attributes.css("dt")) > 0:
                 for i in range(0, len(product_attributes.css("dt"))):
@@ -256,17 +258,18 @@ class QuotesSpider(scrapy.Spider):
                 })
             extracted_name = self.extract_unique_name(their_name)
             scrape_object = {
-                "url": main_url,
-                "cutsheet_url": cutsheet_url,
-                "manufacturers": manufacturers,
-                "their_name": their_name,
-                "alternate_names": "",
-                "extracted_names": extracted_name,
-                "competitor": self.name,
-                "description": description,
-                "long_description": long_description,
-                "images": images,
-                "offers": offers,
+                "test":productTitleul.extract()
+                # "url": main_url,
+                # "cutsheet_url": cutsheet_url,
+                # "manufacturers": manufacturers,
+                # "their_name": their_name,
+                # "alternate_names": "",
+                # "extracted_names": extracted_name,
+                # "competitor": self.name,
+                # "description": description,
+                # "long_description": long_description,
+                # "images": images,
+                # "offers": offers,
                 # "captured_at": date_time
             }
             print(scrape_object)
