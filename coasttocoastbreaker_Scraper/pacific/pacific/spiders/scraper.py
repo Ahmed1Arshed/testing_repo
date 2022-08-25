@@ -136,8 +136,10 @@ class QuotesSpider(scrapy.Spider):
                 print(message)
                 return
             their_name = productTitle.css("form#product_addtocart_form::attr(data-product-sku)").get()
-                
-                
+            
+            script = response.xpath('//script[@type="text/x-magento-init"]/text()').get()
+            
+            print("script",script)
             # productTitle = response.css("title::text").get()
             # if productTitle is None:
             #     message = f"No their_name info found productTitle = $('title').text()for {main_url}"
