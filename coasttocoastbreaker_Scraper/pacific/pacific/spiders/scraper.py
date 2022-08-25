@@ -123,15 +123,15 @@ class QuotesSpider(scrapy.Spider):
             http_url = main_url.split("/")
             http_url = [ele for ele in http_url if ele.strip()]
             name_url = http_url[2].split("-")
-            productTitle = response.css("div.breadcrumbs")
-            if productTitle is None:
-                message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
-                print(message)
-                return
+            # productTitle = pydash.get(response.css("div.breadcrumbs"),0)
+            # if productTitle is None:
+            #     message = f"No their_name info found div = $('breadcrumbs').text()for {main_url}"
+            #     print(message)
+            #     return
             # productTitleul = productTitle.css('ul')
             # if productTitleul is not None:
-            #     their_name_details = productTitleul.css('li.item.product_name')
-            #     their_name = their_name_details.css('strong::text').get()
+            their_name_details = response.css('li.item.product_name')
+            their_name = their_name_details.css('strong::text').get()
                 
                 
             # productTitle = response.css("title::text").get()
