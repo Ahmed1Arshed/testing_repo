@@ -137,7 +137,7 @@ class QuotesSpider(scrapy.Spider):
                 return
             their_name = productTitle.css("form#product_addtocart_form::attr(data-product-sku)").get()
             
-            script = response.xpath('//script[@type="text/x-magento-init"]/text()').get()
+            script = response.xpath('//script[@type="text/x-magento-init"]/text()').getall()
             
             print("script",script)
             # productTitle = response.css("title::text").get()
